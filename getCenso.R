@@ -5,36 +5,41 @@
 
 library(data.table)
 library(tidyverse)
+library(stringr)
 
 memory.limit(54000)
 
-### função para ler, filtrar, tratar e juntar os arquivos de cada região
+### function to load, clean and append the regions csv's.
 
 
 getCenso <- function(ano){
 
-  
+  # Getting South data
 
     sul <- fread(paste0("C:/Users/lucas/Documents/Censo_PSF/data/", 
                           ano, "/DADOS/",
-                          "MATRICULA_SUL.CSV"), sep = "|") %>%
-    select(ano_censo = contains("ANO_CENSO"),
-           ano_nasc = contains("NU_ANO"), 
-           municipio = contains("MUNICIPIO"),
-           etapa_ensino = contains("ETAPA_ENSINO")) %>%
-    filter(ano_nasc == ano_censo - 11)
-    
+                          "MATRICULA_SUL.CSV"), 
+                 sep = "|") %>%
+      select(
+        ano_censo = ends_with("ANO_CENSO"),
+        ano_nasc = ends_with("NU_ANO"),
+        municipio = contains("MUNICIPIO"),
+        etapa_ensino = contains("ETAPA_ENSINO")) %>%
+      filter(ano_nasc == ano_censo - 11)
+  
+  # Getting Southeast data
 
     sudeste <- fread(paste0("C:/Users/lucas/Documents/Censo_PSF/data/", 
                  ano, "/DADOS/",
                  "MATRICULA_SUDESTE.CSV"), sep = "|") %>%
-      select(ano_censo = contains("ANO_CENSO"),
-             ano_nasc = contains("NU_ANO"), 
-             municipio = contains("MUNICIPIO"),
-             etapa_ensino = contains("ETAPA_ENSINO")) %>%
+      select(
+        ano_censo = ends_with("ANO_CENSO"),
+        ano_nasc = ends_with("NU_ANO"),
+        municipio = contains("MUNICIPIO"),
+        etapa_ensino = contains("ETAPA_ENSINO")) %>%
       filter(ano_nasc == ano_censo - 11)
     
-    # binding data to censo
+    # binding data to censo (south and southeast is being appended)
     
     censo <- sul %>% 
       bind_rows(sudeste)
@@ -43,16 +48,17 @@ getCenso <- function(ano){
     
     rm(sul, sudeste)
     
-    # nordeste data
+    # Getting northeast data
     
     nordeste <- fread(paste0("C:/Users/lucas/Documents/Censo_PSF/data/", 
                  ano, "/DADOS/",
                  "MATRICULA_NORDESTE.CSV"), sep = "|") %>%
-      select(ano_censo = contains("ANO_CENSO"),
-             ano_nasc = contains("NU_ANO"), 
-             municipio = contains("MUNICIPIO"),
-             etapa_ensino = contains("ETAPA_ENSINO")) %>%
-      filter(ano_nasc == ano_censo - 11) 
+      select(
+        ano_censo = ends_with("ANO_CENSO"),
+        ano_nasc = ends_with("NU_ANO"),
+        municipio = contains("MUNICIPIO"),
+        etapa_ensino = contains("ETAPA_ENSINO")) %>%
+      filter(ano_nasc == ano_censo - 11)
     
     # binding data to censo
     
@@ -63,16 +69,17 @@ getCenso <- function(ano){
     
     rm(nordeste)
     
-    # norte data
+    # Getting North data
     
     norte <- fread(paste0("C:/Users/lucas/Documents/Censo_PSF/data/", 
                  ano, "/DADOS/",
                  "MATRICULA_NORTE.CSV"), sep = "|") %>%
-      select(ano_censo = contains("ANO_CENSO"),
-             ano_nasc = contains("NU_ANO"), 
-             municipio = contains("MUNICIPIO"),
-             etapa_ensino = contains("ETAPA_ENSINO")) %>%
-      filter(ano_nasc == ano_censo - 11) 
+      select(
+        ano_censo = ends_with("ANO_CENSO"),
+        ano_nasc = ends_with("NU_ANO"),
+        municipio = contains("MUNICIPIO"),
+        etapa_ensino = contains("ETAPA_ENSINO")) %>%
+      filter(ano_nasc == ano_censo - 11)
     
     # binding data to censo
     
@@ -83,16 +90,17 @@ getCenso <- function(ano){
     
     rm(norte)
     
-    # nordeste data
+    # Getting Center West data
     
     
     co <- fread(paste0("C:/Users/lucas/Documents/Censo_PSF/data/", 
                  ano, "/DADOS/",
                  "MATRICULA_CO.CSV"), sep = "|") %>%
-      select(ano_censo = contains("ANO_CENSO"),
-             ano_nasc = contains("NU_ANO"), 
-             municipio = contains("MUNICIPIO"),
-             etapa_ensino = contains("ETAPA_ENSINO")) %>%
+      select(
+        ano_censo = ends_with("ANO_CENSO"),
+        ano_nasc = ends_with("NU_ANO"),
+        municipio = contains("MUNICIPIO"),
+        etapa_ensino = contains("ETAPA_ENSINO")) %>%
       filter(ano_nasc == ano_censo - 11)
   
     # binding data to censo
@@ -104,8 +112,7 @@ getCenso <- function(ano){
     
     rm(co)
     
-    # nordeste data
-    
+    # writing a csv with all regions csv appended
     
   write.csv2(censo, paste0("censo", ano, ".csv"))
 
@@ -118,7 +125,7 @@ getCenso <- function(ano){
 # getCenso(2009)
 # getCenso(2010)
 # getCenso(2011)
-#getCenso(2012)
-getCenso(2013)
-getCenso(2014)
+# getCenso(2012)
+# getCenso(2013)
+# getCenso(2014)
 getCenso(2015)
