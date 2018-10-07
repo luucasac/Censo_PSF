@@ -25,10 +25,3 @@ base <- censo %>%
   left_join(psf, by = c("cod_mun", "ano_censo")) %>% 
   filter(ano_censo != 2014 & ano_censo != 2015)
 
-# removing from memory old datasets
-
-rm(censo, psf)
-
-
-# our dataset is read for analysis !!
-
